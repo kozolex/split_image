@@ -14,43 +14,48 @@ def crop(path, input, height, width, k, page, area):
                 pass
             k +=1
 
+def giveStepSizePadding (sizeImage, sizeCrop = 200, minPadding = 0.1):
+    padding = (minPadding * sizeCrop)
+    sizeCropNoPadding =  int(sizeCrop - padding)
+    parts = int(sizeImage / sizeCropNoPadding) + 1              #how many parts fit in to sizeImage and one more
+    sizeOver = int((parts * sizeCropNoPadding) - sizeImage  )   #size over the image
+    sizeStep = int(sizeCrop -  int(sizeOver/int(parts)))
+    print('size, crop, cropNo, parts, over, steps, result : {0}, {1}, {2}, {3}, {4}, {5}, {6}'.format(sizeImage, sizeCrop, sizeCropNoPadding, parts, sizeOver, sizeStep, parts*sizeStep ) )
+    return sizeStep, parts
 
+def giveStepSize (sizeImage, sizeCrop = 200):
+    padding = int(sizeImage / sizeCrop)          #auto padding
+    parts = int(sizeImage / sizeCrop) + padding  #how many parts fit in to size Image and one more
+    sizeOver = (sizeCrop * parts) - sizeImage    #size over the image
+    sizeOverSingle = int(sizeOver / (parts-1))   #size over the image
+    sizeStep = int(sizeCrop -  sizeOverSingle)
+
+    print('sizeImage, sizeCrop, padding, parts: {0}, {1}, {2}, {3}'.format(sizeImage, sizeCrop, padding, parts ) )
+    return sizeStep, int(parts)
 
 
 img = Image.open(open('input/test.png', 'rb'))
 imgWidth, imgHeight = img.size
-crop_size = 600
+crop_size = 604
 percentPadding = 0.1
-padding = int( percentPadding * crop_size )
 
 if crop_size <= imgWidth and crop_size<= imgHeight:
-    print('Image resolition W/H, crop, padding: {0},{1},{2},{3}'.format(imgWidth, imgHeight, crop_size, padding))
-    #How many parts we need to generate
-    partsWidth = int(imgWidth / (crop_size - padding))
-    partsHeight = int(imgHeight / (crop_size - padding))
-    print('Parts on x and y: {0},{1}'.format(partsWidth, partsHeight))
-
-    paddingWidth = imgWidth - ((crop_size - padding)*partsWidth)
-    paddingHeight = imgHeight - ((crop_size - padding)*partsHeight)
-    print('Rest size W/H: {0},{1}'.format(paddingWidth, paddingHeight))
-
-    stepSizeW = int( (imgWidth / (partsWidth + 1) ) + (paddingWidth/(partsWidth + 1)))
-    stepSizeH = int( (imgHeight / (partsHeight + 1) ))
-    print('Step size W/H: {0}, {1}'.format(stepSizeW, stepSizeH) )
+    stepSizeW, partsWidth = giveStepSize(imgWidth, crop_size)
+    stepSizeH, partsHeight = giveStepSize(imgHeight, crop_size)
 
     drawing = ImageDraw.Draw(img)
-    for idx in range(0, partsWidth+1):
-        for idy in range(0, partsHeight+1):
+    for idx in range(0, partsWidth):
+        for idy in range(0, partsHeight):
             idxNow = idx * stepSizeW
             idyNow = idy * stepSizeH
             box = (idxNow, idyNow, idxNow + crop_size, idyNow + crop_size)
             crop = img.crop(box)
             crop.save('./output/test_'+str(box).replace('(', '').replace(')', '').replace(', ', '_')+'.png', 'PNG')
-            #drawing.rectangle( (idxNow, idyNow, idxNow + crop_size, idyNow + crop_size), outline="red", width=2)
-            #print(idx * stepSizeW, idy * stepSizeH )
+            drawing.rectangle( box, outline="red", width=2)
+            
     
 else:
     print ('Crop size is too large.' )
 
-#img.show()
+img.show()
 
