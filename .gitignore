@@ -136,3 +136,4 @@ dmypy.json
 *.PNG
 *.tif
 *.tiff
+.vscode/settings.json
