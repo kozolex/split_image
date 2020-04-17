@@ -128,5 +128,11 @@ dmypy.json
 # Pyre type checker
 .pyre/
 .vscode/settings.json
+
+#images
 *.png
-input/DSC01129.JPG
+*.JPG
+*.jpg
+*.PNG
+*.tif
+*.tiff
