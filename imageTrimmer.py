@@ -6,9 +6,10 @@ class ImageTrimmer:
     Class to split image to part with constant side size. 
 
     """
-    def __init__(self, imagePath, sizeCrop):
+    def __init__(self, imagePath, sizeCrop, sizeCropY):
         self.imagePath = imagePath
         self.sizeCrop = sizeCrop
+        self.sizeCropY = sizeCropY
         self.img = Image.open( open(imagePath, 'rb') )
         self.imgWidth, self.imgHeight = self.img.size
         self.imgBaseName = path.basename(imagePath)  
@@ -34,7 +35,7 @@ class ImageTrimmer:
     def trimmingProcess(self, savePar=False, drawPar = False):
         if self.sizeCrop <= self.imgWidth and self.sizeCrop<= self.imgHeight:
             stepSizeW, partsWidth = self.giveStepSize(self.imgWidth, self.sizeCrop)
-            stepSizeH, partsHeight = self.giveStepSize(self.imgHeight, self.sizeCrop)
+            stepSizeH, partsHeight = self.giveStepSize(self.imgHeight, self.sizeCropY)
             
             if drawPar == True:
                 imgDraw = Image.open( open(self.imagePath, 'rb') )
@@ -45,7 +46,7 @@ class ImageTrimmer:
                 for idy in range(0, partsHeight):
                     idxNow = idx * stepSizeW
                     idyNow = idy * stepSizeH
-                    box = (idxNow, idyNow, idxNow + self.sizeCrop, idyNow + self.sizeCrop)
+                    box = (idxNow, idyNow, idxNow + self.sizeCrop, idyNow + self.sizeCropY)
 
                     #Saving crop of source image to file
                     if savePar == True:
@@ -66,5 +67,5 @@ class ImageTrimmer:
 
 
 #testImage = ImageTrimmer('input/DSC01129.JPG', 604)
-testImage = ImageTrimmer('input/test.png', 604)
+testImage = ImageTrimmer('input/test.png', 256, 192)
 testImage.trimmingProcess(savePar=1, drawPar=1)
