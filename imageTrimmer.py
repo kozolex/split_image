@@ -1,4 +1,4 @@
-from os import path
+from os import path, walk
 from PIL import Image, ImageDraw
 
 class ImageTrimmer:
@@ -51,8 +51,7 @@ class ImageTrimmer:
                     #Saving crop of source image to file
                     if savePar == True:
                         crop = self.img.crop(box)
-                        crop.save('./output/'+str(box).replace('(', '').replace(')', '').replace(', ', '_')+'.png', 'PNG')
-                        crop.save('./output/test_'+str(box).replace('(', '').replace(')', '').replace(', ', '_')+'.png', 'PNG')
+                        crop.save('./output/'+ self.imageName+'_'+str(box).replace('(', '').replace(')', '').replace(', ', '_')+'.png', 'PNG')
                     
                     #Drawing for feedback - debaging - optional
                     if drawPar == True:
@@ -63,9 +62,11 @@ class ImageTrimmer:
         
         if drawPar == True:
             imgDraw.show()
+        print('Done.')
 
 
+#Testing code
+#testImage = ImageTrimmer('input/DSC01129.JPG', 608, 608)
+#testImage.trimmingProcess(savePar=1, drawPar=0)
 
-#testImage = ImageTrimmer('input/DSC01129.JPG', 604)
-testImage = ImageTrimmer('input/test.png', 256, 192)
-testImage.trimmingProcess(savePar=1, drawPar=1)
+
