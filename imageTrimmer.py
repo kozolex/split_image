@@ -32,19 +32,51 @@ class ImageTrimmer:
         print('sizeImage, sizeCrop, padding, parts, sizeOver, sizeOverSingle : {0}, {1}, {2}, {3}, {4}, {5}'.format(sizeImage, sizeCrop, padding, parts, sizeOver, sizeOverSingle) )
         return sizeStep, int(parts)
 
-    def giveLocalAdnotation(self, sizeImageW, sizeImageH, cropBox = (0, 0, 0, 0) )
+    def giveLocalAnnotation(self,annotationFileName, cropBox = (0, 0, 500, 500) ):
         
         #Calculating the relative coordinates of the image slice
-        self.cropImgX = cropBox[0] / sizeImageW
-        self.cropImgY = cropBox[1] / sizeImageH
-        self.cropImgW = cropBox[2] / sizeImageW
-        self.cropImgH = cropBox[4] / sizeImageH
+        cropImgX = cropBox[0] / self.imgWidth
+        cropImgY = cropBox[1] / self.imgHeight
+        cropImgW = cropBox[2] / self.imgWidth
+        cropImgH = cropBox[3] / self.imgHeight
+        boxCrop = (1.0, cropImgX, cropImgY, cropImgW,  cropImgH )
+        print(cropImgX)
 
-    def readAdnotiationFromFile(self, filename)
+        listAnnotations = self.readAnnotationFromFile(annotationFileName)
+        
+        for oneAnnotation in listAnnotations:
+            oneAnnotation = list(map(float, oneAnnotation)) #may by i do it better 
+            print(boxCrop)
+            print(oneAnnotation)
+            print(self.compareShapes(oneAnnotation, boxCrop) )
+
+    def compareShapes(self, rect1, rect2):
+        x = 1 
+        y = 2
+        w = 3
+        h = 4
+        if (rect1[x] < rect2[x] + rect2[w] and rect1[x] + rect1[w] > rect2[x] and
+            rect1[y] < rect2[y] + rect2[h] and rect1[y] + rect1[h] > rect2[y]):
+            print('detect')
+            xCommon = max(rect1[x], rect2[x])
+            wCommon = min(rect1[w], rect2[w])
+            hCommon = max(rect1[h], rect2[h])
+            yCommon = min(rect1[y], rect2[y])
+            boxCommon = (xCommon, yCommon, wCommon, hCommon)
+            return boxCommon
+        else:
+            return 
+
+
+    def readAnnotationFromFile(self, filename):
+        """
+        Generate two demantions list from annotation file. 
+        list structure = [line number] [id class, x, y, with, height]
+        """
         with open(filename) as f:
-            content = f.readlines()
-            # you may also want to remove whitespace characters like `\n` at the end of each line
-            content = [x.strip() for x in content]    
+            listAnnotations = [l.strip().split() for l in f]
+            
+        return listAnnotations
     
     def trimmingProcess(self, savePar=False, drawPar = False):
         if self.sizeCrop <= self.imgWidth and self.sizeCrop<= self.imgHeight:
@@ -80,7 +112,8 @@ class ImageTrimmer:
 
 
 #Testing code
-#testImage = ImageTrimmer('input/DSC00117.JPG', 608, 608)
+testImage = ImageTrimmer('input/dsc00472.jpg', 608, 608)
 #testImage.trimmingProcess(savePar=0, drawPar=1)
+testImage.giveLocalAnnotation('input/dsc00472.txt')
 
 
