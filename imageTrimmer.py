@@ -31,6 +31,20 @@ class ImageTrimmer:
 
         print('sizeImage, sizeCrop, padding, parts, sizeOver, sizeOverSingle : {0}, {1}, {2}, {3}, {4}, {5}'.format(sizeImage, sizeCrop, padding, parts, sizeOver, sizeOverSingle) )
         return sizeStep, int(parts)
+
+    def giveLocalAdnotation(self, sizeImageW, sizeImageH, cropBox = (0, 0, 0, 0) )
+        
+        #Calculating the relative coordinates of the image slice
+        self.cropImgX = cropBox[0] / sizeImageW
+        self.cropImgY = cropBox[1] / sizeImageH
+        self.cropImgW = cropBox[2] / sizeImageW
+        self.cropImgH = cropBox[4] / sizeImageH
+
+    def readAdnotiationFromFile(self, filename)
+        with open(filename) as f:
+            content = f.readlines()
+            # you may also want to remove whitespace characters like `\n` at the end of each line
+            content = [x.strip() for x in content]    
     
     def trimmingProcess(self, savePar=False, drawPar = False):
         if self.sizeCrop <= self.imgWidth and self.sizeCrop<= self.imgHeight:
@@ -66,7 +80,7 @@ class ImageTrimmer:
 
 
 #Testing code
-#testImage = ImageTrimmer('input/DSC01129.JPG', 608, 608)
-#testImage.trimmingProcess(savePar=1, drawPar=0)
+#testImage = ImageTrimmer('input/DSC00117.JPG', 608, 608)
+#testImage.trimmingProcess(savePar=0, drawPar=1)
 
 
