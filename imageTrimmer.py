@@ -53,10 +53,13 @@ class ImageTrimmer:
         Convert crop box position and size in original image -> relative float tuple to pixel tuple
         """
         #Calculating the relative coordinates of the image slice
-        cropImgX = float(cropBox[0]) * self.imgWidth
-        cropImgY = float(cropBox[1]) * self.imgHeight
+
         cropImgW = float(cropBox[2]) * self.imgWidth
         cropImgH = float(cropBox[3]) * self.imgHeight
+
+        cropImgX = float(cropBox[0]) * self.imgWidth - cropImgW/2
+        cropImgY = float(cropBox[1]) * self.imgHeight - cropImgH/2
+
         boxCrop = (int(cropImgX), int(cropImgY), int(cropImgX)+int(cropImgW),  int(cropImgY) +int(cropImgH) ) #relative version
         return boxCrop
 
