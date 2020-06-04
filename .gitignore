@@ -138,3 +138,4 @@ dmypy.json
 *.tiff
 .vscode/settings.json
 input/dsc00472.txt
+.vscode/settings.json
