@@ -104,7 +104,7 @@ class ImageTrimmer:
             
         return listAnnotations
     
-    def trimmingProcess(self, savePar=False, drawPar = False):
+    def trimmingProcess(self, savePar=False, drawPar = False, fileExt = 'png'):
         if self.sizeCrop <= self.imgWidth and self.sizeCrop<= self.imgHeight:
             stepSizeW, partsWidth = self.giveStepSize(self.imgWidth, self.sizeCrop)
             stepSizeH, partsHeight = self.giveStepSize(self.imgHeight, self.sizeCropY)
@@ -129,7 +129,10 @@ class ImageTrimmer:
                     #Saving crop of source image to file
                     if savePar == True:
                         crop = self.img.crop(box)
-                        crop.save('./output/'+ self.imageName+'_'+str(box).replace('(', '').replace(')', '').replace(', ', '_')+'.png', 'PNG')
+                        if fileExt == 'jpg': fileExt2 = 'JPEG'
+                        else: fileExt2 = fileExt
+
+                        crop.save('./output/'+ self.imageName+'_'+str(box).replace('(', '').replace(')', '').replace(', ', '_')+'.'+fileExt, fileExt2.upper())
                     
                     #Drawing for feedback - debaging - optional
                     if drawPar == True:
@@ -145,8 +148,8 @@ class ImageTrimmer:
 
 
 #Testing code
-testImage = ImageTrimmer('input/dsc00472.jpg', 608, 608)
-testImage.trimmingProcess(savePar=0, drawPar=1)
+#testImage = ImageTrimmer('input/dsc00472.jpg', 608, 608)
+#testImage.trimmingProcess(savePar=0, drawPar=1)
 #testImage.giveLocalAnnotation('input/dsc00472.txt')
 
 
