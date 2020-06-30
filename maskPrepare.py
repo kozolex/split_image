@@ -1,9 +1,10 @@
+#use this file if your masks are 16bits but value 1 is a mask and rest is a background
 import glob
 from PIL import Image, ImageDraw
 
 #print(glob.glob('../Otagowane/otagowane18.06.20/czw_kwi_9_11_40_58_2020a/*.png'))
 
-for concretFile in glob.glob('../Otagowane/otagowane18.06.20/*/*.png', recursive=True):
+for concretFile in glob.glob('/media/mk/3C243342451A70C5/Grant_rak/Zdjecia_krakow/OTAGOWANE/train/*/*.png', recursive=True):
     print(concretFile)
     img16 = Image.open(concretFile)
     img8 = img16.convert('L')
