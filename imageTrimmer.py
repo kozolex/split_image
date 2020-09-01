@@ -15,10 +15,10 @@ class ImageTrimmer:
         self.imgBaseName = path.basename(imagePath)  
         self.imageName, self.imageExt = path.splitext(self.imgBaseName)
 
-        print(f'File to analyze {self.imgBaseName}')
-        print(f'File name: {self.imageName}')
-        print(f'File extention: {self.imageExt}')
-        print(f'Crop size: {sizeCrop}')
+        #print(f'File to analyze {self.imgBaseName}')
+        #print(f'File name: {self.imageName}')
+        #print(f'File extention: {self.imageExt}')
+        #print(f'Crop size: {sizeCrop}')
 
     def giveStepSize(self, sizeImage, sizeCrop):
         padding = int(sizeImage / sizeCrop / 4)      #auto padding
@@ -29,7 +29,7 @@ class ImageTrimmer:
         sizeOverSingle = int(sizeOver / (parts-1))   #size over the image
         sizeStep = int(sizeCrop -  sizeOverSingle)
 
-        print('sizeImage, sizeCrop, padding, parts, sizeOver, sizeOverSingle : {0}, {1}, {2}, {3}, {4}, {5}'.format(sizeImage, sizeCrop, padding, parts, sizeOver, sizeOverSingle) )
+        #print('sizeImage, sizeCrop, padding, parts, sizeOver, sizeOverSingle : {0}, {1}, {2}, {3}, {4}, {5}'.format(sizeImage, sizeCrop, padding, parts, sizeOver, sizeOverSingle) )
         return sizeStep, int(parts)
 
     def giveLocalAnnotation(self,annotationFileName, cropBox = (0, 0, 0, 0) ):
@@ -43,9 +43,9 @@ class ImageTrimmer:
         
         for oneAnnotation in listAnnotations:
             oneAnnotation = list(map(float, oneAnnotation)) #may by i do it better 
-            print(boxCrop)
-            print(oneAnnotation)
-            print(self.compareShapes(oneAnnotation, boxCrop) )
+            #print(boxCrop)
+            #print(oneAnnotation)
+            #print(self.compareShapes(oneAnnotation, boxCrop) )
         return
 
     def toPixels(self, cropBox):
@@ -116,10 +116,12 @@ class ImageTrimmer:
                     #print(oneAnnotation)
                     oneAnnotation = tuple(oneAnnotation[1:])
                     oneAnnotation = self.toPixels(oneAnnotation)
-                    print(oneAnnotation)
+                    #print(oneAnnotation)
                     drawing.rectangle(oneAnnotation, outline=(255,0,0,128), width=2)
+            imgID = 0
 
             for idx in range(0, partsWidth):
+                imgID += 1
 
                 for idy in range(0, partsHeight):
                     idxNow = idx * stepSizeW
@@ -132,7 +134,7 @@ class ImageTrimmer:
                         if fileExt == 'jpg': fileExt2 = 'JPEG'
                         else: fileExt2 = fileExt
 
-                        crop.save('./output/'+ self.imageName+'_'+str(box).replace('(', '').replace(')', '').replace(', ', '_')+'.'+fileExt, fileExt2.upper())
+                        crop.save('./output/'+ str(imgID) + self.imageName+'_'+str(box).replace('(', '').replace(')', '').replace(', ', '_')+'.'+fileExt, fileExt2.upper())
                     
                     #Drawing for feedback - debaging - optional
                     if drawPar == True:
@@ -144,7 +146,7 @@ class ImageTrimmer:
         
         if drawPar == True:
             imgDraw.show()
-        print('Done.')
+        #print('Done.')
 
 
 #Testing code
