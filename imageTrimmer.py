@@ -132,6 +132,7 @@ class ImageTrimmer:
                     if savePar == True:
                         crop = self.img.crop(box)
                         if fileExt == 'jpg': fileExt2 = 'JPEG'
+                        elif fileExt == 'tif': fileExt2 = 'TIFF'
                         else: fileExt2 = fileExt
 
                         crop.save('./output/'+ str(imgID) + self.imageName+'_'+str(box).replace('(', '').replace(')', '').replace(', ', '_')+'.'+fileExt, fileExt2.upper())
